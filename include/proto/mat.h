@@ -1,5 +1,5 @@
-#ifndef PROTO_CORE_MAT_H
-#define PROTO_CORE_MAT_H
+#ifndef PROTO_MAT_H
+#define PROTO_MAT_H
 
 #include <algorithm>
 #include <type_traits>
@@ -8,7 +8,7 @@
 #include <ostream>
 #include <tuple>
 
-#include "proto/core/vec.h"
+#include "proto/vec.h"
 
 namespace proto {
 

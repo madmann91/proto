@@ -1,10 +1,10 @@
-#ifndef PROTO_CORE_BBOX_H
-#define PROTO_CORE_BBOX_H
+#ifndef PROTO_BBOX_H
+#define PROTO_BBOX_H
 
 #include <limits>
 
-#include "proto/core/vec.h"
-#include "proto/core/mat.h"
+#include "proto/vec.h"
+#include "proto/mat.h"
 
 namespace proto {
 

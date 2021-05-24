@@ -1,5 +1,5 @@
-#ifndef PROTO_CORE_BVH_H
-#define PROTO_CORE_BVH_H
+#ifndef PROTO_BVH_H
+#define PROTO_BVH_H
 
 #include <climits>
 #include <limits>
@@ -7,11 +7,11 @@
 #include <cassert>
 #include <type_traits>
 
-#include "proto/core/bbox.h"
-#include "proto/core/vec.h"
-#include "proto/core/utils.h"
-#include "proto/core/ray.h"
-#include "proto/core/frustum.h"
+#include "proto/bbox.h"
+#include "proto/vec.h"
+#include "proto/utils.h"
+#include "proto/ray.h"
+#include "proto/frustum.h"
 
 namespace proto {
 
@@ -131,6 +131,7 @@ public:
 
     Bvh() = default;
 
+    /// Builds a BVH from a set of bounding boxes and centers, passed as functions.
     template <
         typename BBoxes, typename Centers,
         std::enable_if_t<std::is_invocable_v<BBoxes, size_t>, int> = 0,
@@ -144,9 +145,12 @@ public:
         }
         build(bboxes_ptr.get(), centers_ptr.get(), primitive_count, config);
     }
+
+    /// Builds a BVH from a set of bounding boxes and centers, passed as pointers.
     Bvh(const BBox<T>* bboxes, const Vec3<T>* centers, size_t primitive_count, const BuildConfig& config = {}) {
         build(bboxes, centers, primitive_count, config);
     }
+
     Bvh(Bvh&& other) {
         *this = std::move(other);
     }
@@ -164,8 +168,18 @@ public:
 
     const size_t* primitive_indices() const { return primitive_indices_.get(); }
 
-    template <bool Any, typename F> void intersect(Ray<T>&, F f) const;
-    template <typename F> void intersect(Frustum<T>&, F f) const;
+    /// Intersects a ray with the BVH,
+    /// using the given function to intersect the BVH leaves.
+    /// If `Any` is true, does not attempt to order nodes during traversal.
+    /// This exits if `f` returns true.
+    template <bool Any, typename F>
+    void intersect(Ray<T>&, F f) const;
+
+    /// Intersects a frustum with the BVH,
+    /// using the given function to intersect the BVH leaves.
+    /// This exits if `f` returns true.
+    template <typename F>
+    void intersect(Frustum<T>&, F f) const;
 
 private:
     static constexpr size_t bin_count = 16;
@@ -178,7 +192,7 @@ private:
 
         Stack() = default;
 
-        bool empty() const { return size == 0; }
+        bool is_empty() const { return size == 0; }
 
         void push(size_t elem) {
             assert(size < Capacity);
@@ -229,7 +243,7 @@ void Bvh<T>::intersect(Ray<T>& ray, F f) const {
         auto [tmin, tmax] = node.intersect(ray, inv_dir, scaled_org, octant);
         if (tmin <= tmax) {
             if (node.is_leaf()) {
-                f(ray, node);
+                if (f(ray, node)) break;
             } else {
                 size_t order = Any ? 0 : octant[node.split_axis];
                 top = node.first_child_or_primitive + order;
@@ -237,7 +251,7 @@ void Bvh<T>::intersect(Ray<T>& ray, F f) const {
                 continue;
             }
         }
-        if (stack.empty())
+        if (stack.is_empty())
             break;
         top = stack.pop();
     }
@@ -260,7 +274,7 @@ void Bvh<T>::intersect(Frustum<T>& frustum, F f) const {
                 [[fallthrough]];
             case Plane<T>::Straddling:
                 if (node.is_leaf()) {
-                    f(frustum, node);
+                    if (f(frustum, node)) break;
                 } else {
                     top = node.first_child_or_primitive;
                     stack.push(node.first_child_or_primitive + 1);
@@ -270,7 +284,7 @@ void Bvh<T>::intersect(Frustum<T>& frustum, F f) const {
            default:
                 break;
         }
-        if (stack.empty())
+        if (stack.is_empty())
             break;
         if (stack.size == skip) skip = 0;
         top = stack.pop();

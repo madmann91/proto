@@ -1,5 +1,5 @@
-#ifndef PROTO_CORE_UTILS_H
-#define PROTO_CORE_UTILS_H
+#ifndef PROTO_UTILS_H
+#define PROTO_UTILS_H
 
 #include <cmath>
 #include <cstdint>

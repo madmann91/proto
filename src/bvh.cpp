@@ -2,7 +2,7 @@
 #include <numeric>
 #include <stack>
 
-#include "proto/core/bvh.h"
+#include "proto/bvh.h"
 
 namespace proto {
 

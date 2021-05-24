@@ -1,5 +1,5 @@
-#ifndef PROTO_CORE_VEC_H
-#define PROTO_CORE_VEC_H
+#ifndef PROTO_VEC_H
+#define PROTO_VEC_H
 
 #include <cstddef>
 #include <algorithm>
@@ -9,7 +9,7 @@
 #include <cmath>
 #include <ostream>
 
-#include "proto/core/utils.h"
+#include "proto/utils.h"
 
 namespace proto {
 

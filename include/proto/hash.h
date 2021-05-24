@@ -1,5 +1,5 @@
-#ifndef PROTO_CORE_HASH_H
-#define PROTO_CORE_HASH_H
+#ifndef PROTO_HASH_H
+#define PROTO_HASH_H
 
 #include <cstdint>
 #include <cstddef>

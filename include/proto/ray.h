@@ -1,11 +1,11 @@
-#ifndef PROTO_CORE_RAY_H
-#define PROTO_CORE_RAY_H
+#ifndef PROTO_RAY_H
+#define PROTO_RAY_H
 
 #include <limits>
 #include <array>
 #include <cmath>
 
-#include "proto/core/vec.h"
+#include "proto/vec.h"
 
 namespace proto {
 

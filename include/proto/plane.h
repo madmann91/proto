@@ -1,8 +1,8 @@
-#ifndef PROTO_CORE_PLANE_H
-#define PROTO_CORE_PLANE_H
+#ifndef PROTO_PLANE_H
+#define PROTO_PLANE_H
 
-#include "proto/core/bbox.h"
-#include "proto/core/mat.h"
+#include "proto/bbox.h"
+#include "proto/mat.h"
 
 namespace proto {
 

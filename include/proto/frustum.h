@@ -1,10 +1,10 @@
-#ifndef PROTO_CORE_FRUSTUM_H
-#define PROTO_CORE_FRUSTUM_H
+#ifndef PROTO_FRUSTUM_H
+#define PROTO_FRUSTUM_H
 
 #include <array>
 
-#include "proto/core/plane.h"
-#include "proto/core/mat.h"
+#include "proto/plane.h"
+#include "proto/mat.h"
 
 namespace proto {
 
