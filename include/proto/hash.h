@@ -19,7 +19,7 @@ struct Hasher {
 
     Hasher& combine(const std::string_view& s) { return combine(s.data(), s.size()); }
 
-    template <typename T, std::enable_if_t<std::is_pod<T>::value, int> = 0>
+    template <typename T, std::enable_if_t<std::is_standard_layout_v<T> && std::is_trivial_v<T>, int> = 0>
     Hasher& combine(const T& t) { return combine(&t, sizeof(T)); }
 
     template <typename T>

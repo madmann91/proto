@@ -77,23 +77,23 @@ public:
     Vec& operator *= (float other) { return *this = *this * other; }
 
     Vec operator + (const Vec& other) const {
-        return Vec([=] (size_t i) { return values[i] + other[i]; });
+        return Vec([&] (size_t i) { return values[i] + other[i]; });
     }
 
     Vec operator - (const Vec& other) const {
-        return Vec([=] (size_t i) { return values[i] - other[i]; });
+        return Vec([&] (size_t i) { return values[i] - other[i]; });
     }
 
     Vec operator * (const Vec& other) const {
-        return Vec([=] (size_t i) { return values[i] * other[i]; });
+        return Vec([&] (size_t i) { return values[i] * other[i]; });
     }
 
     Vec operator / (const Vec& other) const {
-        return Vec([=] (size_t i) { return values[i] / other[i]; });
+        return Vec([&] (size_t i) { return values[i] / other[i]; });
     }
 
     friend Vec operator * (const Vec& a, T s) {
-        return Vec([=] (size_t i) { return a[i] * s; });
+        return Vec([&] (size_t i) { return a[i] * s; });
     }
 
     friend Vec operator * (T s, const Vec& b) {
@@ -102,11 +102,11 @@ public:
 
     friend Vec operator / (const Vec& a, T s) {
         auto inv_s = T(1) / s;
-        return Vec([=] (size_t i) { return a[i] * inv_s; });
+        return Vec([&] (size_t i) { return a[i] * inv_s; });
     }
 
     friend Vec operator / (T s, const Vec& a) {
-        return Vec([=] (size_t i) { return s / a[i]; });
+        return Vec([&] (size_t i) { return s / a[i]; });
     }
 
     friend T dot(const Vec& a, const Vec& b) {
