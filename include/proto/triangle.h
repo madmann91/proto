@@ -36,8 +36,8 @@ struct Triangle {
         auto r = cross(ray.dir, c);
         auto inv_det = T(1) / dot(n, ray.dir);
 
-        auto u = dot(r, v2 - v0) * inv_det;
-        auto v = dot(r, v0 - v1) * inv_det;
+        auto u = dot(r, e2) * inv_det;
+        auto v = dot(r, e1) * inv_det;
         auto w = T(1) - u - v;
 
         // These comparisons are designed to return false
