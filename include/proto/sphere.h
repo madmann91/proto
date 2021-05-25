@@ -29,7 +29,7 @@ struct Sphere  {
     /// Result of intersecting a ray with a sphere.
     /// Contains either 0, 1, or two distances,
     /// depending on whether and where the ray intersects the sphere.
-    /// The distances are stored by increasing distance.
+    /// The distances are stored in increasing order.
     struct Intersection {
         unsigned t_count = 0;
         float t[2];
