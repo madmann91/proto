@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
 project(proto)
 
-add_library(proto src/bvh.cpp)
-target_include_directories(proto PUBLIC include)
+add_library(proto INTERFACE)
+target_include_directories(proto INTERFACE include)
 set_target_properties(proto PROPERTIES CXX_STANDARD 17)
 
 # Enable IPO in Release mode

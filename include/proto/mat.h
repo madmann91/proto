@@ -156,13 +156,31 @@ public:
 };
 
 template <typename T> using Mat2x2 = Mat<T, 2, 2>;
+template <typename T> using Mat2x3 = Mat<T, 2, 3>;
+template <typename T> using Mat2x4 = Mat<T, 2, 3>;
+template <typename T> using Mat3x2 = Mat<T, 3, 2>;
 template <typename T> using Mat3x3 = Mat<T, 3, 3>;
+template <typename T> using Mat3x4 = Mat<T, 3, 4>;
+template <typename T> using Mat4x2 = Mat<T, 4, 2>;
+template <typename T> using Mat4x3 = Mat<T, 4, 3>;
 template <typename T> using Mat4x4 = Mat<T, 4, 4>;
 using Mat2x2f = Mat2x2<float>;
+using Mat2x3f = Mat2x3<float>;
+using Mat2x4f = Mat2x4<float>;
+using Mat3x2f = Mat3x2<float>;
 using Mat3x3f = Mat3x3<float>;
+using Mat3x4f = Mat3x4<float>;
+using Mat4x2f = Mat4x2<float>;
+using Mat4x3f = Mat4x3<float>;
 using Mat4x4f = Mat4x4<float>;
 using Mat2x2d = Mat2x2<double>;
+using Mat2x3d = Mat2x3<double>;
+using Mat2x4d = Mat2x4<double>;
+using Mat3x2d = Mat3x2<double>;
 using Mat3x3d = Mat3x3<double>;
+using Mat3x4d = Mat3x4<double>;
+using Mat4x2d = Mat4x2<double>;
+using Mat4x3d = Mat4x3<double>;
 using Mat4x4d = Mat4x4<double>;
 
 template <typename T, size_t N, size_t M>

@@ -8,14 +8,12 @@
 #include <proto/ray.h>
 #include <proto/sphere.h>
 #include <proto/triangle.h>
-#include <proto/bvh.h>
 
 template <typename T>
 void instantiate() {
     using namespace proto;
     Triangle<T> triangle;
     Sphere<T> sphere;
-    Bvh<T> bvh;
     BBox<T> bbox;
     Frustum<T> frustum;
     Plane<T> plane;

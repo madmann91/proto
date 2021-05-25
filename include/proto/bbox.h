@@ -3,6 +3,7 @@
 
 #include <limits>
 
+#include "proto/utils.h"
 #include "proto/vec.h"
 #include "proto/mat.h"
 
