@@ -12,12 +12,12 @@
 template <typename T>
 void instantiate() {
     using namespace proto;
-    Triangle<T> triangle;
-    Sphere<T> sphere;
-    BBox<T> bbox;
-    Frustum<T> frustum;
-    Plane<T> plane;
-    Ray<T> ray;
+    [[maybe_unused]] Triangle<T> triangle;
+    [[maybe_unused]] Sphere<T> sphere;
+    [[maybe_unused]] BBox<T> bbox;
+    [[maybe_unused]] Frustum<T> frustum;
+    [[maybe_unused]] Plane<T> plane;
+    [[maybe_unused]] Ray<T> ray;
 }
 
 int main() {
