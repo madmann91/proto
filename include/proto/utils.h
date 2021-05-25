@@ -130,15 +130,15 @@ template <typename T, std::enable_if_t<std::is_unsigned<T>::value, int> = 0>
 inline size_t count_leading_zeros(T value) {
     static constexpr size_t bit_count = sizeof(T) * CHAR_BIT;
 #if defined(__GNUC__) || defined(__clang__)
-	if constexpr (bit_count <= sizeof(unsigned int) * CHAR_BIT)       return __builtin_clz(value);
-	if constexpr (bit_count <= sizeof(unsigned long) * CHAR_BIT)      return __builtin_clzl(value);
-	if constexpr (bit_count <= sizeof(unsigned long long) * CHAR_BIT) return __builtin_clzll(value);
+    if constexpr (bit_count <= sizeof(unsigned int) * CHAR_BIT)       return __builtin_clz(value);
+    if constexpr (bit_count <= sizeof(unsigned long) * CHAR_BIT)      return __builtin_clzl(value);
+    if constexpr (bit_count <= sizeof(unsigned long long) * CHAR_BIT) return __builtin_clzll(value);
 #elif defined(_MSC_VER)
-	if constexpr (bit_count <= 16) return __lzcnt16(value);
-	if constexpr (bit_count <= 32) return __lzcnt32(value);
-	if constexpr (bit_count <= 64) return __lzcnt64(value);
+    if constexpr (bit_count <= 16) return __lzcnt16(value);
+    if constexpr (bit_count <= 32) return __lzcnt32(value);
+    if constexpr (bit_count <= 64) return __lzcnt64(value);
 #endif
-	// Fallback, works with any bitwidth
+    // Fallback, works with any bitwidth
     size_t a = 0;
     size_t b = bit_count;
     auto all = T(-1);

@@ -32,7 +32,7 @@ struct Triangle {
         auto e1 = v0 - v1;
         auto e2 = v2 - v0;
         auto n = cross(e1, e2);
-		auto c = v0 - ray.org;
+        auto c = v0 - ray.org;
         auto r = cross(ray.dir, c);
         auto inv_det = T(1) / dot(n, ray.dir);
 
