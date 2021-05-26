@@ -51,7 +51,7 @@ template <> struct SizedInteger<64> { using Type = int64_t; };
 template <size_t Bits> using SizedIntegerType = typename SizedInteger<Bits>::Type;
 
 /// Helper function to use FMA instructions, on 32-bit floating-point values.
-inline float fast_mul_add(float a, float b, float c) {
+inline proto_always_inline float fast_mul_add(float a, float b, float c) {
 #ifdef FP_FAST_FMAF
     return std::fmaf(a, b, c);
 #else
@@ -61,7 +61,7 @@ inline float fast_mul_add(float a, float b, float c) {
 }
 
 /// Helper function to use FMA instructions, on 64-bit floating-point values.
-inline double fast_mul_add(double a, double b, double c) {
+inline proto_always_inline double fast_mul_add(double a, double b, double c) {
 #ifdef FP_FAST_FMA
     return std::fma(a, b, c);
 #else
@@ -73,22 +73,22 @@ inline double fast_mul_add(double a, double b, double c) {
 /// Computes the inverse of the given value, making sure not to divide by 0.
 /// For very small values, this returns `1 / epsilon`.
 template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-inline T safe_inverse(T x) {
+inline proto_always_inline T safe_inverse(T x) {
     return std::fabs(x) <= std::numeric_limits<T>::epsilon()
         ? T(1) / std::numeric_limits<T>::epsilon() : T(1) / x;
 }
 
 /// Robust min function, guaranteed to return a non-NaN result if the right argument is not a NaN.
 template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-inline T robust_min(T a, T b) { return a < b ? a : b; }
+inline proto_always_inline T robust_min(T a, T b) { return a < b ? a : b; }
 
 /// Robust max function, guaranteed to return a non-NaN result if the right argument is not a NaN.
 template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-inline T robust_max(T a, T b) { return a > b ? a : b; }
+inline proto_always_inline T robust_max(T a, T b) { return a > b ? a : b; }
 
 /// Atomically computes the maximum of two values. Returns the old value.
 template <typename T>
-inline T atomic_max(std::atomic<T>& x, T y) {
+inline proto_always_inline T atomic_max(std::atomic<T>& x, T y) {
     auto z = x.load();
     while (z < y && !x.compare_exchange_weak(z, y)) ;
     return z;
@@ -96,7 +96,7 @@ inline T atomic_max(std::atomic<T>& x, T y) {
 
 /// Atomically computes the minimum of two values. Returns the old value.
 template <typename T>
-inline T atomic_min(std::atomic<T>& x, T y) {
+inline proto_always_inline T atomic_min(std::atomic<T>& x, T y) {
     auto z = x.load();
     while (z < y && !x.compare_exchange_weak(z, y)) ;
     return z;
@@ -105,7 +105,7 @@ inline T atomic_min(std::atomic<T>& x, T y) {
 /// Reinterprets the bits of the given value as another type safely,
 /// as long as the size of those types is the same.
 template <typename To, typename From>
-inline To as(From from) {
+inline proto_always_inline To as(From from) {
     static_assert(sizeof(To) == sizeof(From));
     To to;
     std::memcpy(&to, &from, sizeof(from));
@@ -114,7 +114,7 @@ inline To as(From from) {
 
 /// Adds the given number of ULPs (Unit in the Last Place) to the floating-point argument.
 template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-inline T add_ulp_magnitude(T x, unsigned ulps) {
+inline proto_always_inline T add_ulp_magnitude(T x, unsigned ulps) {
     using U = std::make_unsigned_t<SizedIntegerType<sizeof(T) * CHAR_BIT>>;
     return std::isfinite(x) ? as<T>(as<U>(x) + ulps) : x;
 }
@@ -127,7 +127,7 @@ inline constexpr size_t round_up_log2(size_t i, size_t p = 0) {
 /// Returns the number of bits that are equal to zero,
 /// starting from the most significant one.
 template <typename T, std::enable_if_t<std::is_unsigned<T>::value, int> = 0>
-inline size_t count_leading_zeros(T value) {
+inline proto_always_inline size_t count_leading_zeros(T value) {
     static constexpr size_t bit_count = sizeof(T) * CHAR_BIT;
 #if defined(__GNUC__) || defined(__clang__)
     if constexpr (bit_count <= sizeof(unsigned int) * CHAR_BIT)       return __builtin_clz(value);
@@ -154,7 +154,7 @@ inline size_t count_leading_zeros(T value) {
 /// Split an unsigned integer such that its bits are spaced by 2 zeros.
 /// For instance, morton_split(0b00110010) = 0b000000001001000000001000.
 template <typename T, std::enable_if_t<std::is_unsigned_v<T>, int> = 0>
-inline T morton_split(T x) {
+inline proto_always_inline T morton_split(T x) {
     constexpr size_t log_bits = round_up_log2(sizeof(T) * CHAR_BIT);
     auto mask = std::numeric_limits<T>::max();
     for (size_t i = log_bits, n = 1 << log_bits; i > 0; --i, n >>= 1) {
@@ -166,12 +166,12 @@ inline T morton_split(T x) {
 
 /// Morton-encode three unsigned integers into one.
 template <typename T, std::enable_if_t<std::is_unsigned_v<T>, int> = 0>
-inline T morton_encode(T x, T y, T z) {
+inline proto_always_inline T morton_encode(T x, T y, T z) {
     return morton_split(x) | (morton_split(y) << 1) | (morton_split(z) << 2);
 }
 
 /// Reads a file in its entirety as a string.
-inline std::string read_file(const std::string& file_name) {
+inline proto_always_inline std::string read_file(const std::string& file_name) {
     std::ifstream is(file_name, std::ifstream::binary);
     if (!is)
         throw std::runtime_error("Cannot read file \"" + file_name + "\"");
