@@ -65,7 +65,7 @@ public:
     }
 
     Vec operator - () const { return Vec([this] (size_t i) { return -values[i]; }); }
-    Vec safe_inverse() const { return Vec([this] (size_t i) { return safe_inverse(values[i]); }); }
+    Vec safe_inverse() const { return Vec([this] (size_t i) { return proto::safe_inverse(values[i]); }); }
 
     T& operator [] (size_t i) { return values[i]; }
     const T& operator [] (size_t i) const { return values[i]; }
