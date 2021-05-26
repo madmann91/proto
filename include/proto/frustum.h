@@ -13,7 +13,7 @@ template <typename T>
 struct Frustum {
     std::array<Plane<T>, 6> planes;
 
-    typename Plane<T>::Intersection intersect(const BBox<T>& bbox) const {
+    proto_always_inline typename Plane<T>::Intersection intersect(const BBox<T>& bbox) const {
         auto intr = Plane<T>::In;
         for (auto& plane : planes) {
             switch (plane.intersect(bbox)) {
@@ -28,15 +28,15 @@ struct Frustum {
         return intr;
     }
 
-    Frustum transform(const Mat4x4<T>& transform) const {
+    proto_always_inline Frustum transform(const Mat4x4<T>& transform) const {
         return transform([&] (auto& plane) { return plane.transform(transform); });
     }
 
-    Frustum transform_inverse(const Mat4x4<T>& inverse) const {
+    proto_always_inline Frustum transform_inverse(const Mat4x4<T>& inverse) const {
         return transform([&] (auto& plane) { return plane.transform_inverse(inverse); });
     }
 
-    static Frustum from_mat4x4(const Mat4x4<T>& transform) {
+    static proto_always_inline Frustum from_mat4x4(const Mat4x4<T>& transform) {
         // Extract the frustum planes from a transform matrix
         // see: http://www8.cs.umu.se/kurser/5DV051/HT12/lab/plane_extraction.pdf
         return Frustum {
@@ -53,7 +53,7 @@ struct Frustum {
 
 private:
     template <typename F>
-    Frustum transform(F&& f) const {
+    proto_always_inline Frustum transform(F&& f) const {
         return Frustum {
             std::array {
                 f(planes[0]),
