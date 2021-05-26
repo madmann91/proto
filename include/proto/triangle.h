@@ -14,21 +14,20 @@ struct Triangle {
     Vec3<T> v0, v1, v2;
 
     Triangle() = default;
-    Triangle(const Vec3<T>& v0, const Vec3<T>& v1, const Vec3<T>& v2)
+    proto_always_inline Triangle(const Vec3<T>& v0, const Vec3<T>& v1, const Vec3<T>& v2)
         : v0(v0), v1(v1), v2(v2)
     {}
 
     /// Returns the *unnormalized* normal of the triangle.
-    Vec3<T> normal() const { return cross(v1 - v0, v2 - v0); }
+    proto_always_inline Vec3<T> normal() const { return cross(v1 - v0, v2 - v0); }
 
-    BBox<T> bbox() const { return BBox<T>(v0).extend(v1).extend(v2); }
-    Vec3<T> center() const { return (v0 + v1 + v2) / T(3); }
+    proto_always_inline BBox<T> bbox() const { return BBox<T>(v0).extend(v1).extend(v2); }
+    proto_always_inline Vec3<T> center() const { return (v0 + v1 + v2) / T(3); }
 
-    /// Result of the intersection between a triangle and a ray, represented
-    /// as a distance along the ray, and the barycentric coordinates on the triangle.
-    struct Intersection { T t, u, v; };
-
-    std::optional<Intersection> intersect(const Ray<T>& ray) {
+    /// Intersects a ray with the triangle. If an intersection is found,
+    /// this function updates `ray.tmax` with the corresponding distance along the ray,
+    /// and returns the barycentric coordinates on the triangle as a pair.
+    proto_always_inline std::optional<std::pair<T, T>> intersect(Ray<T>& ray) const {
         auto e1 = v0 - v1;
         auto e2 = v2 - v0;
         auto n = cross(e1, e2);
@@ -45,7 +44,7 @@ struct Triangle {
         if (u >= 0 && v >= 0 && w >= 0) {
             auto t = dot(n, c) * inv_det;
             if (t >= ray.tmin && t <= ray.tmax)
-                return std::make_optional(Intersection { t, u, v });
+                return ray.tmax = t, std::make_optional(std::pair { u, v });
         }
 
         return std::nullopt;

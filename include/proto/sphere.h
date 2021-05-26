@@ -16,28 +16,20 @@ struct Sphere  {
     T radius;
 
     Sphere() = default;
-    Sphere(const Vec3<T>& center, T radius)
+    proto_always_inline Sphere(const Vec3<T>& center, T radius)
         : center(center), radius(radius)
     {}
 
-    BBox<T> bbox() const {
+    proto_always_inline BBox<T> bbox() const {
         return BBox<T>(
             center - Vec3<T>(radius),
             center + Vec3<T>(radius));
     }
 
-    /// Result of intersecting a ray with a sphere.
-    /// Contains either 0, 1, or two distances,
-    /// depending on whether and where the ray intersects the sphere.
-    /// The distances are stored in increasing order.
-    struct Intersection {
-        unsigned t_count = 0;
-        float t[2];
-
-        operator bool() const { return t_count > 0; }
-    };
-
-    Intersection intersect(const Ray<T>& ray) const {
+    /// Returns the result of intersecting the given ray with the sphere,
+    /// as sorted pair `(t0, t1)` of ray distances (if an intersection exists).
+    /// This function does not check if the result is within the ray's `[tmin, tmax]` range.
+    proto_always_inline std::optional<std::pair<T, T>> intersect_unchecked(const Ray<T>& ray) const {
         auto oc = ray.org - center;
         auto a = dot(ray.dir, ray.dir);
         auto b = 2 * dot(ray.dir, oc);
@@ -47,18 +39,25 @@ struct Sphere  {
         if (delta >= 0) {
             auto inv = -T(0.5) / a;
             auto sqrt_delta = std::sqrt(delta);
-            auto t0 = (b - sqrt_delta) * inv;
-            auto t1 = (b + sqrt_delta) * inv;
-
-            Intersection intr;
-            if (t0 >= ray.tmin && t0 <= ray.tmax)
-                intr[intr.t_count++] = t0;
-            if (t1 >= ray.tmin && t1 <= ray.tmax)
-                intr[intr.t_count++] = t1;
-            return intr;
+            auto t0 = (b + sqrt_delta) * inv;
+            auto t1 = (b - sqrt_delta) * inv;
+            return std::pair { t0, t1 };
         }
 
-        return Intersection();
+        return false;
+    }
+
+    /// Intersects a ray with the sphere. If an intersection is found,
+    /// this function updates `ray.tmax` with the corresponding distance along the ray.
+    proto_always_inline bool intersect(Ray<T>& ray) const {
+        if (auto range = intersect_unchecked(ray)) {
+            auto [t0, t1] = *range;
+            if (t0 >= ray.tmin && t0 <= ray.tmax)
+                return ray.tmax = t0, true;
+            if (t1 >= ray.tmin && t1 <= ray.tmax)
+                return ray.tmax = t1, true;
+        }
+        return false;
     }
 };
 
