@@ -178,6 +178,16 @@ inline proto_always_inline std::string read_file(const std::string& file_name) {
     return std::string(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>());
 }
 
+/// Copies the given array up to the provided size.
+/// This assumes that the size of the array passed as argument is greater
+/// or equal to the provided number of elements to copy.
+template <typename T>
+inline std::unique_ptr<T[]> copy(std::unique_ptr<T[]>& array, size_t size) {
+    auto copy = std::make_unique<T[]>(size);
+    std::copy_n(array.get(), size, copy.get());
+    return copy;
+}
+
 } // namespace proto
 
 #endif
