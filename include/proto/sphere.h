@@ -41,10 +41,10 @@ struct Sphere  {
             auto sqrt_delta = std::sqrt(delta);
             auto t0 = (b + sqrt_delta) * inv;
             auto t1 = (b - sqrt_delta) * inv;
-            return std::pair { t0, t1 };
+            return std::make_optional(std::pair { t0, t1 });
         }
 
-        return false;
+        return std::nullopt;
     }
 
     /// Intersects a ray with the sphere. If an intersection is found,
