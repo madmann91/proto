@@ -5,6 +5,7 @@
 #include <proto/bbox.h>
 #include <proto/plane.h>
 #include <proto/frustum.h>
+#include <proto/plane_set.h>
 #include <proto/ray.h>
 #include <proto/sphere.h>
 #include <proto/triangle.h>
@@ -16,6 +17,7 @@ void instantiate() {
     [[maybe_unused]] Sphere<T> sphere;
     [[maybe_unused]] BBox<T> bbox;
     [[maybe_unused]] Frustum<T> frustum;
+    [[maybe_unused]] PlaneSet<T, 4> plane_set;
     [[maybe_unused]] Plane<T> plane;
     [[maybe_unused]] Ray<T> ray;
 }
