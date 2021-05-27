@@ -189,6 +189,16 @@ inline std::unique_ptr<T[]> copy(std::unique_ptr<T[]>& array, size_t size) {
     return copy;
 }
 
+/// Executes the given function over the given range `[Begin, End]`,
+/// with each iteration generating a new call to the function.
+template <size_t Begin, size_t End, typename F, std::enable_if_t<std::is_invocable_v<F, size_t>, int> = 0>
+void static_for(F&& f) {
+    if constexpr (Begin < End) {
+        f(Begin);
+        static_for<Begin + 1, End>(f);
+    }
+}
+
 } // namespace proto
 
 #endif
