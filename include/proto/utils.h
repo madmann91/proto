@@ -10,6 +10,7 @@
 #include <climits>
 #include <fstream>
 #include <atomic>
+#include <algorithm>
 
 #if defined(__GNUC__) || defined(__clang__)
 #define proto_restrict      __restrict
