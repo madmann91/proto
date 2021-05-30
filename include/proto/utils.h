@@ -200,6 +200,18 @@ inline proto_always_inline void static_for(F&& f) {
     }
 }
 
+/// Linearly interpolate the first two values using the third one as an interpolation factor.
+template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+inline proto_always_inline T lerp(T a, T b, T t) {
+    return (1 - t) * a + t * b;
+}
+
+/// Linearly interpolate the first three values on a triangle, using the last two values as interpolation factors.
+template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+inline proto_always_inline T lerp(T a, T b, T c, T u, T v) {
+    return (1 - u - v) * a + u * b + v * c;
+}
+
 } // namespace proto
 
 #endif

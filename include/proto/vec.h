@@ -171,6 +171,16 @@ inline proto_always_inline Vec<T, N> safe_inverse(const Vec<T, N>& v) {
     return Vec<T, N>([&] (size_t i) { return proto::safe_inverse(v[i]); });
 }
 
+template <typename T, size_t N, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+inline proto_always_inline Vec<T, N> lerp(const Vec<T, N>& a, const Vec<T, N>& b, T t) {
+    return (1 - t) * a + t * b;
+}
+
+template <typename T, size_t N, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+inline proto_always_inline Vec<T, N> lerp(const Vec<T, N>& a, const Vec<T, N>& b, const Vec<T, N>& c, T u, T v) {
+    return (1 - u - v) * a + u * b + v * c;
+}
+
 } // namespace proto
 
 #endif
