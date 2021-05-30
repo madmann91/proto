@@ -194,6 +194,18 @@ inline proto_always_inline Mat<T, N, M> abs(const Mat<T, N, M>& m) {
     return Mat<T, N, M>([&] (size_t i, size_t j) { return std::abs(m(i, j)); });
 }
 
+/// Generates an orthonormal basis with its z-axis oriented along the given unit vector.
+template <typename T>
+inline Mat3x3<T> ortho_basis(const Vec3<T>& n) {
+    // From "Building an Orthonormal Basis, Revisited", Duff et al.
+    auto s = std::copysign(T(1), n[2]);
+    auto a = -T(1) / (s + n[2]);
+    auto b = n[0] * n[1] * a;
+    Vec3<T> t (T(1) + s * n[0] * n[0] * a, s * b, -s * n[0]);
+    Vec3<T> bt(b, s + n[1] * n[1] * a, -n[1]);
+    return Mat3x3<T>(t, bt, n);
+}
+
 } // namespace proto
 
 #endif
