@@ -5,7 +5,7 @@ It contains basic infrastructure to do small vector linear algebra, and some sim
 
 ## Building
 
-This project requires a C++17-compliant compiler and CMake.
+This project requires a C++20-compliant compiler and CMake.
 To build it, type:
 
     mkdir build
@@ -16,7 +16,7 @@ To build it, type:
 ## License
 
 ```
-Copyright 2020 Arsène Pérard-Gayot
+Copyright 2021 Arsène Pérard-Gayot
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
