@@ -184,7 +184,7 @@ inline proto_always_inline std::string read_file(const std::string& file_name) {
 /// This assumes that the size of the array passed as argument is greater
 /// or equal to the provided number of elements to copy.
 template <typename T>
-inline std::unique_ptr<T[]> copy(std::unique_ptr<T[]>& array, size_t size) {
+inline proto_always_inline std::unique_ptr<T[]> copy(std::unique_ptr<T[]>& array, size_t size) {
     auto copy = std::make_unique<T[]>(size);
     std::copy_n(array.get(), size, copy.get());
     return copy;
@@ -193,7 +193,7 @@ inline std::unique_ptr<T[]> copy(std::unique_ptr<T[]>& array, size_t size) {
 /// Executes the given function over the given range `[Begin, End]`,
 /// with each iteration generating a new call to the function.
 template <size_t Begin, size_t End, typename F, std::enable_if_t<std::is_invocable_v<F, size_t>, int> = 0>
-void static_for(F&& f) {
+inline proto_always_inline void static_for(F&& f) {
     if constexpr (Begin < End) {
         f(Begin);
         static_for<Begin + 1, End>(f);
