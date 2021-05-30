@@ -142,12 +142,12 @@ inline proto_always_inline Vec3<T> cross(const Vec3<T>& a, const Vec3<T>& b) {
 
 template <typename T, size_t N>
 inline proto_always_inline Vec<T, N> min(const Vec<T, N>& a, const Vec<T, N>& b) {
-    return Vec<T, N>([=] (size_t i) { return std::min(a[i], b[i]); });
+    return Vec<T, N>([=] (size_t i) { return robust_min(a[i], b[i]); });
 }
 
 template <typename T, size_t N>
 inline proto_always_inline Vec<T, N> max(const Vec<T, N>& a, const Vec<T, N>& b) {
-    return Vec<T, N>([=] (size_t i) { return std::max(a[i], b[i]); });
+    return Vec<T, N>([=] (size_t i) { return robust_max(a[i], b[i]); });
 }
 
 template <typename T, size_t N>
@@ -179,6 +179,11 @@ inline proto_always_inline Vec<T, N> lerp(const Vec<T, N>& a, const Vec<T, N>& b
 template <typename T, size_t N, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
 inline proto_always_inline Vec<T, N> lerp(const Vec<T, N>& a, const Vec<T, N>& b, const Vec<T, N>& c, T u, T v) {
     return (1 - u - v) * a + u * b + v * c;
+}
+
+template <typename T, size_t N, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+inline proto_always_inline Vec<T, N> clamp(const Vec<T, N>& x, const Vec<T, N>& min, const Vec<T, N>& max) {
+    return proto::max(proto::min(x, max), min);
 }
 
 } // namespace proto

@@ -81,11 +81,11 @@ inline proto_always_inline T safe_inverse(T x) {
 }
 
 /// Robust min function, guaranteed to return a non-NaN result if the right argument is not a NaN.
-template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+template <typename T, std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>
 inline proto_always_inline T robust_min(T a, T b) { return a < b ? a : b; }
 
 /// Robust max function, guaranteed to return a non-NaN result if the right argument is not a NaN.
-template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
+template <typename T, std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>
 inline proto_always_inline T robust_max(T a, T b) { return a > b ? a : b; }
 
 /// Atomically computes the maximum of two values. Returns the old value.
@@ -210,6 +210,12 @@ inline proto_always_inline T lerp(T a, T b, T t) {
 template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
 inline proto_always_inline T lerp(T a, T b, T c, T u, T v) {
     return (1 - u - v) * a + u * b + v * c;
+}
+
+/// Constrain the given value to be in the interval `[min, max]`.
+template <typename T, std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>
+inline proto_always_inline T clamp(T x, T min, T max) {
+    return proto::robust_min(proto::robust_max(x, min), max);
 }
 
 } // namespace proto
