@@ -53,10 +53,11 @@ public:
 
     template <typename F, std::enable_if_t<std::is_invocable_v<F, size_t, size_t>, int> = 0>
     explicit proto_always_inline Mat(F&& f) {
-        for (size_t i = 0; i < N; ++i) {
-            for (size_t j = 0; j < M; ++j)
+        proto::static_for<0, N>([&] (size_t i) {
+            proto::static_for<0, M>([&] (size_t j) {
                 (*this)(i, j) = f(i, j);
-        }
+            });
+        });
     }
 
     proto_always_inline T& operator () (size_t row, size_t col) { return values[col * N + row]; }

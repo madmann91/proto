@@ -63,8 +63,7 @@ public:
 
     template <typename F, std::enable_if_t<std::is_invocable_v<F, size_t>, int> = 0>
     explicit proto_always_inline Vec(F&& f) {
-        for (size_t i = 0; i < N; ++i)
-            values[i] = f(i);
+        proto::static_for<0, N>([&] (size_t i) { values[i] = f(i); });
     }
 
     proto_always_inline T& operator [] (size_t i) { return values[i]; }
