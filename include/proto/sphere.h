@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <cmath>
+#include <numbers>
 
 #include "proto/vec.h"
 #include "proto/ray.h"
@@ -24,6 +25,10 @@ struct Sphere  {
         return BBox<T>(
             center - Vec3<T>(radius),
             center + Vec3<T>(radius));
+    }
+
+    proto_always_inline T area() const {
+        return T(4) * std::numbers::pi_v<T> * radius * radius;
     }
 
     /// Returns the result of intersecting the given ray with the sphere,
