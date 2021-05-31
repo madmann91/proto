@@ -10,8 +10,6 @@
 #include <climits>
 #include <fstream>
 #include <atomic>
-#include <algorithm>
-#include <memory>
 
 #if defined(__GNUC__) || defined(__clang__)
 #define proto_restrict      __restrict
@@ -178,16 +176,6 @@ inline proto_always_inline std::string read_file(const std::string& file_name) {
     if (!is)
         throw std::runtime_error("Cannot read file \"" + file_name + "\"");
     return std::string(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>());
-}
-
-/// Copies the given array up to the provided size.
-/// This assumes that the size of the array passed as argument is greater
-/// or equal to the provided number of elements to copy.
-template <typename T>
-inline proto_always_inline std::unique_ptr<T[]> copy(std::unique_ptr<T[]>& array, size_t size) {
-    auto copy = std::make_unique<T[]>(size);
-    std::copy_n(array.get(), size, copy.get());
-    return copy;
 }
 
 /// Executes the given function over the given range `[Begin, End]`,
