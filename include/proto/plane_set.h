@@ -2,6 +2,7 @@
 #define PROTO_PLANE_SET_H
 
 #include <array>
+#include <algorithm>
 
 #include "proto/plane.h"
 #include "proto/mat.h"
@@ -39,16 +40,9 @@ struct PlaneSet {
 private:
     template <typename F>
     proto_always_inline PlaneSet transform(F&& f) const {
-        return PlaneSet {
-            std::array {
-                f(planes[0]),
-                f(planes[1]),
-                f(planes[2]),
-                f(planes[3]),
-                f(planes[4]),
-                f(planes[5]),
-            }
-        };
+        std::array<Plane<T>, N> transformed_planes;
+        std::transform(planes.begin(), planes.end(), transformed_planes.begin(), f);
+        return PlaneSet { transformed_planes };
     }
 };
 
