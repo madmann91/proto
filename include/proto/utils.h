@@ -22,14 +22,6 @@
 #define proto_always_inline
 #endif
 
-#if defined(__GNUC__) || defined(__clang__)
-#define proto_likely(x)   __builtin_expect(x, true)
-#define proto_unlikely(x) __builtin_expect(x, false)
-#else
-#define proto_likely(x)   x
-#define proto_unlikely(x) x
-#endif
-
 #if defined(__clang__)
 #define PROTO_ENABLE_FP_CONTRACT \
     _Pragma("clang diagnostic push") \
