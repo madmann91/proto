@@ -75,7 +75,7 @@ inline proto_always_inline double fast_mul_add(double a, double b, double c) {
 template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
 inline proto_always_inline T safe_inverse(T x) {
     return std::fabs(x) <= std::numeric_limits<T>::epsilon()
-        ? T(1) / std::numeric_limits<T>::epsilon() : T(1) / x;
+        ? std::copysign(T(1) / std::numeric_limits<T>::epsilon(), x) : T(1) / x;
 }
 
 /// Robust min function, guaranteed to return a non-NaN result if the right argument is not a NaN.
