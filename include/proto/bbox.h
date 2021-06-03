@@ -59,6 +59,13 @@ struct BBox {
         return axis;
     }
 
+    proto_always_inline bool is_contained_in(const BBox& other) const {
+        return
+            min[0] >= other.min[0] && max[0] <= other.max[0] &&
+            min[1] >= other.min[1] && max[1] <= other.max[1] &&
+            min[2] >= other.min[2] && max[2] <= other.max[2];
+    }
+
     static proto_always_inline BBox empty() {
         return BBox(
             Vec3<T>(+std::numeric_limits<T>::max()),
