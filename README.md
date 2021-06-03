@@ -3,15 +3,12 @@
 `proto` is an utility library that I use in my own graphics-related projects.
 It contains basic infrastructure to do small vector linear algebra, and some simple ray-tracing constructs.
 
-## Building
+## Installing
 
-This project requires a C++20-compliant compiler and CMake.
-To build it, type:
+Since this project is a header-only library, it can be added to your project simply by
+writing the following CMake code to your CMakeLists.txt:
 
-    mkdir build
-    cd build
-    cmake .. CMAKE_BUILD_TYPE=<Debug|Release>
-    make -j
+    add_subdirectory(path/to/proto)
 
 ## License
 
