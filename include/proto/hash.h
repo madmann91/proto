@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <string_view>
 
-namespace proto {
+namespace proto::fnv {
 
 /// Incremental hashing utility using the Fowler-Voll-No hash function.
 struct Hasher {
@@ -33,6 +33,6 @@ struct Hasher {
     operator uint32_t () const { return hash; }
 };
 
-} // namespace proto
+} // namespace proto::fnv
 
 #endif
