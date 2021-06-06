@@ -111,9 +111,16 @@ inline proto_always_inline T add_ulp_magnitude(T x, unsigned ulps) {
     return std::isfinite(x) ? as<T>(as<U>(x) + ulps) : x;
 }
 
-/// Computes the (rounded-up) compile-time log in base-2 of an unsigned integer.
-inline constexpr size_t round_up_log2(size_t i, size_t p = 0) {
-    return (size_t(1) << p) >= i ? p : round_up_log2(i, p + 1);
+/// Computes the (rounded-up) log in base-2 of an unsigned integer.
+template <typename T, std::enable_if_t<std::is_unsigned_v<T>, int> = 0>
+inline constexpr T log2(T i, T p = 0) {
+    return (T(1) << p) >= i ? p : log2(i, p + 1);
+}
+
+/// Returns the smallest value greater than the first argument that is a multiple of the second.
+template <typename T, std::enable_if_t<std::is_unsigned_v<T>, int> = 0>
+inline constexpr T round_up(T i, T j) {
+    return (i + j - 1) / j * j;
 }
 
 /// Returns the number of bits that are equal to zero,
@@ -134,7 +141,7 @@ inline proto_always_inline size_t count_leading_zeros(T value) {
     size_t a = 0;
     size_t b = bit_count;
     auto all = T(-1);
-    for (size_t i = 0; i < round_up_log2(bit_count); i++) {
+    for (size_t i = 0; i < log2(bit_count); i++) {
         auto m = (a + b) / 2;
         auto mask = all << m;
         if (value & mask) a = m + 1;
@@ -147,7 +154,7 @@ inline proto_always_inline size_t count_leading_zeros(T value) {
 /// For instance, morton_split(0b00110010) = 0b000000001001000000001000.
 template <typename T, std::enable_if_t<std::is_unsigned_v<T>, int> = 0>
 inline proto_always_inline T morton_split(T x) {
-    constexpr size_t log_bits = round_up_log2(sizeof(T) * CHAR_BIT);
+    constexpr size_t log_bits = log2(sizeof(T) * CHAR_BIT);
     auto mask = std::numeric_limits<T>::max();
     for (size_t i = log_bits, n = 1 << log_bits; i > 0; --i, n >>= 1) {
         mask = (mask | (mask << n)) & ~(mask << (n / 2));
