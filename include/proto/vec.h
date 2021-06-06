@@ -75,6 +75,7 @@ public:
     proto_always_inline Vec& operator -= (const Vec& other) { return *this = *this - other; }
     proto_always_inline Vec& operator *= (const Vec& other) { return *this = *this * other; }
     proto_always_inline Vec& operator /= (const Vec& other) { return *this = *this / other; }
+    proto_always_inline Vec& operator /= (float other) { return *this = *this / other; }
     proto_always_inline Vec& operator *= (float other) { return *this = *this * other; }
 
     proto_always_inline Vec operator + (const Vec& other) const {
@@ -155,8 +156,13 @@ inline proto_always_inline T dot(const Vec<T, N>& a, const Vec<T, N>& b) {
 }
 
 template <typename T, size_t N>
+inline proto_always_inline T length_squared(const Vec<T, N>& v) {
+    return dot(v, v);
+}
+
+template <typename T, size_t N>
 inline proto_always_inline T length(const Vec<T, N>& v) {
-    return std::sqrt(dot(v, v));
+    return std::sqrt(length_squared(v));
 }
 
 template <typename T, size_t N>
