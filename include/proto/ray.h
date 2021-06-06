@@ -31,6 +31,12 @@ struct Ray {
             std::signbit(dir[2])
         };
     }
+
+    /// Returns the ray that connects the two given points.
+    /// Can optionally offset the origin of the ray a little, in order to avoid self-intersections.
+    static Ray between_points(const Vec3<T>& from, const Vec3<T>& to, T offset = T(0)) {
+        return Ray(from, to - from, offset, T(1) - offset);
+    }
 };
 
 using Rayf = Ray<float>;
