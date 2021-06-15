@@ -10,6 +10,8 @@ writing the following CMake code to your CMakeLists.txt:
 
     add_subdirectory(/path/to/proto)
 
+This line will provide the target `proto::proto`, which you can link against.
+
 Alternatively, if you have several projects that depend on proto, you can use a call to
 `find_package(proto)`:
 
