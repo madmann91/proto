@@ -156,6 +156,21 @@ inline proto_always_inline T dot(const Vec<T, N>& a, const Vec<T, N>& b) {
 }
 
 template <typename T, size_t N>
+inline proto_always_inline T positive_dot(const Vec<T, N>& a, const Vec<T, N>& b) {
+    return robust_max(dot(a, b), T(0));
+}
+
+template <typename T, size_t N>
+inline proto_always_inline T negative_dot(const Vec<T, N>& a, const Vec<T, N>& b) {
+    return robust_min(dot(a, b), T(0));
+}
+
+template <typename T, size_t N>
+Vec<T, N> reflect(const Vec<T, N>& v, const Vec<T, N>& n) {
+    return (T(2) * dot(n, v)) * n - v;
+}
+
+template <typename T, size_t N>
 inline proto_always_inline T length_squared(const Vec<T, N>& v) {
     return dot(v, v);
 }
