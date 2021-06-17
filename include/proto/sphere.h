@@ -64,6 +64,15 @@ struct Sphere  {
         }
         return false;
     }
+
+    bool operator == (const Sphere& other) const {
+        return center == other.center && radius == other.radius;
+    }
+
+    template <typename Hasher>
+    Hasher& hash(Hasher& hasher) const {
+        return center.hash(hasher).combine(radius);
+    }
 };
 
 using Spheref = Sphere<float>;

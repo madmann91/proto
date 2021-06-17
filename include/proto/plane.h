@@ -45,6 +45,15 @@ struct Plane {
         return Plane(inverse.transpose() * values); 
     }
 
+    bool operator == (const Plane& other) const {
+        return values == other.values;
+    }
+
+    template <typename Hasher>
+    Hasher& hash(Hasher& hasher) const {
+        return values.hash(hasher);
+    }
+
     static proto_always_inline Plane from_points(const Vec3<T>& a, const Vec3<T>& b, const Vec3<T>& c) {
         auto n = cross(b - a, c - a);
         return Plane(Vec4<T>(n, -dot(n, a)));

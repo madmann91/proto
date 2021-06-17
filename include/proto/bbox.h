@@ -66,6 +66,15 @@ struct BBox {
             min[2] >= other.min[2] && max[2] <= other.max[2];
     }
 
+    bool operator == (const BBox& other) const {
+        return min == other.min && max == other.max;
+    }
+
+    template <typename Hasher>
+    Hasher& hash(Hasher& hasher) const {
+        return min.hash(max.hash(hasher));
+    }
+
     static proto_always_inline BBox empty() {
         return BBox(
             Vec3<T>(+std::numeric_limits<T>::max()),

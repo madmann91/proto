@@ -144,6 +144,21 @@ public:
         return Mat([&] (size_t i, size_t j) { return (*this)(i, j) * (T(1) / s); });
     }
 
+    bool operator == (const Mat& other) const {
+        for (size_t i = 0; i < N * M; ++i) {
+            if (values[i] != other[i])
+                return false;
+        }
+        return true;
+    }
+
+    template <typename Hasher>
+    Hasher& hash(Hasher& hasher) const {
+        for (size_t i = 0; i < N * M; ++i)
+            hasher.combine(values[i]);
+        return hasher;
+    }
+
     static proto_always_inline Mat diagonal(T diag) {
         return Mat([&] (size_t i, size_t j) { return i == j ? diag : T(0); });
     }

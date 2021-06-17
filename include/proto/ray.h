@@ -32,6 +32,19 @@ struct Ray {
         };
     }
 
+    bool operator == (const Ray& other) const {
+        return
+            org == other.org &&
+            dir == other.dir &&
+            tmin == other.tmin &&
+            tmax == other.tmax;
+    }
+
+    template <typename Hasher>
+    Hasher& hash(Hasher& hasher) const {
+        return dir.hash(org.hash(hasher)).combine(tmin).combine(tmax);
+    }
+
     /// Returns the ray that connects the two given points.
     /// Can optionally offset the origin of the ray a little, in order to avoid self-intersections.
     static Ray between_points(const Vec3<T>& from, const Vec3<T>& to, T offset = T(0)) {

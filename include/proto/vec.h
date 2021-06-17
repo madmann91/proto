@@ -110,6 +110,21 @@ public:
     friend proto_always_inline Vec operator / (T s, const Vec& a) {
         return Vec([&] (size_t i) { return s / a[i]; });
     }
+
+    bool operator == (const Vec& other) const {
+        for (size_t i = 0; i < N; ++i) {
+            if (values[i] != other[i])
+                return false;
+        }
+        return true;
+    }
+
+    template <typename Hasher>
+    Hasher& hash(Hasher& hasher) const {
+        for (size_t i = 0; i < N; ++i)
+            hasher.combine(values[i]);
+        return hasher;
+    }
 };
 
 template <typename T> using Vec2 = Vec<T, 2>;

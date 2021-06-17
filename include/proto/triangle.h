@@ -50,6 +50,15 @@ struct Triangle {
 
         return std::nullopt;
     }
+
+    bool operator == (const Triangle& other) const {
+        return v0 == other.v0 && v1 == other.v1 && v2 == other.v2;
+    }
+
+    template <typename Hasher>
+    Hasher& hash(Hasher& hasher) const {
+        return v2.hash(v1.hash(v2.hash(hasher)));
+    }
 };
 
 using Trianglef = Triangle<float>;

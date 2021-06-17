@@ -37,6 +37,17 @@ struct PlaneSet {
         return transform([&] (auto& plane) { return plane.transform_inverse(inverse); });
     }
 
+    bool operator == (const PlaneSet& other) const {
+        return planes == other.planes;
+    }
+
+    template <typename Hasher>
+    Hasher& hash(Hasher& hasher) const {
+        for (auto& plane: planes)
+            plane.hash(hasher);
+        return hasher;
+    }
+
 private:
     template <typename F>
     proto_always_inline PlaneSet transform(F&& f) const {
