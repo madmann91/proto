@@ -18,8 +18,9 @@ struct Triangle {
         : v0(v0), v1(v1), v2(v2)
     {}
 
-    /// Returns the *unnormalized* normal of the triangle.
-    proto_always_inline Vec3<T> normal() const { return cross(v1 - v0, v2 - v0); }
+    /// Returns the *unnormalized* (not necessarily unit-length) normal of the triangle.
+    proto_always_inline Vec3<T> raw_normal() const { return cross(v1 - v0, v2 - v0); }
+    proto_always_inline Vec3<T> normal() const { return normalize(raw_normal()); }
 
     proto_always_inline BBox<T> bbox() const { return BBox<T>(v0).extend(v1).extend(v2); }
     proto_always_inline Vec3<T> center() const { return (v0 + v1 + v2) / T(3); }
