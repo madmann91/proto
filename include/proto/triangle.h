@@ -24,7 +24,7 @@ struct Triangle {
 
     proto_always_inline BBox<T> bbox() const { return BBox<T>(v0).extend(v1).extend(v2); }
     proto_always_inline Vec3<T> center() const { return (v0 + v1 + v2) / T(3); }
-    proto_always_inline T area() const { return length(normal()) * T(0.5); }
+    proto_always_inline T area() const { return length(raw_normal()) * T(0.5); }
 
     /// Intersects a ray with the triangle. If an intersection is found,
     /// this function updates `ray.tmax` with the corresponding distance along the ray,
