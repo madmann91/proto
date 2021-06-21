@@ -19,7 +19,7 @@ inline proto_always_inline T cosine_hemisphere_pdf(T cos) {
 
 /// Evaluates the probability density function used for cosine-power-weighted hemisphere sampling.
 template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-inline proto_always_inline T cosine_power_hemisphere_pdf(T cos, T power) {
+inline proto_always_inline T cosine_power_hemisphere_pdf(T power, T cos) {
     return std::pow(cos, power) * T(0.5) * (power + T(1)) * std::numbers::inv_pi_v<T>;
 }
 
