@@ -182,7 +182,7 @@ inline proto_always_inline T negative_dot(const Vec<T, N>& a, const Vec<T, N>& b
 
 template <typename T, size_t N>
 Vec<T, N> reflect(const Vec<T, N>& v, const Vec<T, N>& n) {
-    return (T(2) * dot(n, v)) * n - v;
+    return v - (T(2) * dot(n, v)) * n;
 }
 
 template <typename T, size_t N>
