@@ -4,10 +4,12 @@
 #include <cstddef>
 #include <cmath>
 #include <numbers>
+#include <tuple>
 
 #include "proto/vec.h"
 #include "proto/ray.h"
 #include "proto/bbox.h"
+#include "proto/random.h"
 
 namespace proto {
 
@@ -25,6 +27,11 @@ struct Sphere  {
         return BBox<T>(
             center - Vec3<T>(radius),
             center + Vec3<T>(radius));
+    }
+
+    /// Produces a point uniformly distributed on the sphere.
+    proto_always_inline Vec3<T> sample(T u, T v) const {
+        return center + std::get<0>(sample_uniform_sphere(u, v)) * radius;
     }
 
     proto_always_inline T area() const {
