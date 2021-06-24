@@ -29,13 +29,6 @@ struct Sphere  {
             center + Vec3<T>(radius));
     }
 
-    /// Produces a point uniformly distributed on the sphere,
-    /// and returns it along with the normal at that point.
-    proto_always_inline std::pair<Vec3<T>, Vec3<T>> sample(T u, T v) const {
-        auto dir = std::get<0>(sample_uniform_sphere(u, v));
-        return std::pair { center + dir * radius, dir };
-    }
-
     proto_always_inline T area() const {
         return T(4) * std::numbers::pi_v<T> * radius * radius;
     }
