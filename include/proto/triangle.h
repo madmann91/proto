@@ -19,11 +19,12 @@ struct Triangle {
         : v0(v0), v1(v1), v2(v2)
     {}
 
-    /// Returns a point uniformly distributed on the triangle.
-    proto_always_inline Vec3<T> sample(T u, T v) const {
+    /// Produces a point uniformly distributed on the triangle,
+    /// and returns it along with the normal at that point.
+    proto_always_inline std::pair<Vec3<T>, Vec3<T>> sample(T u, T v) const {
         if (u + v >= T(1))
             u = T(1) - u, v = T(1) - v;
-        return lerp(v0, v1, v2, u, v);
+        return std::pair { lerp(v0, v1, v2, u, v), normal() };
     }
 
     /// Returns the *unnormalized* (not necessarily unit-length) normal of the triangle.
