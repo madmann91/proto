@@ -5,6 +5,7 @@
 #include <cmath>
 #include <numbers>
 #include <tuple>
+#include <optional>
 
 #include "proto/vec.h"
 #include "proto/ray.h"
