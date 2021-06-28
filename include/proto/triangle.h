@@ -38,7 +38,7 @@ struct Triangle {
 
     template <typename Hasher>
     Hasher& hash(Hasher& hasher) const {
-        return v2.hash(v1.hash(v2.hash(hasher)));
+        return v2.hash(v1.hash(v0.hash(hasher)));
     }
 };
 
