@@ -18,6 +18,11 @@ struct Plane {
     proto_always_inline Vec3<T> normal() const { return Vec3<T>(values); }
     proto_always_inline T distance() const { return -values[3]; }
 
+    /// Returns the dihedral angle of this plane with another.
+    proto_always_inline T cos_angle(const Plane<T>& other) const {
+        return (normal().dot(other.normal())) / (normal().length() * other.normal().length());
+    }
+
     enum Intersection { In, Out, Straddling };
     proto_always_inline Intersection intersect(const BBox<T>& bbox) const {
         auto n = Vec3<T>(
