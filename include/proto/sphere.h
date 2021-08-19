@@ -37,9 +37,10 @@ struct Sphere  {
     /// Returns the result of intersecting the given ray with the sphere,
     /// as sorted pair `(t0, t1)` of ray distances (if an intersection exists).
     /// This function does not check if the result is within the ray's `[tmin, tmax]` range.
+    template <bool AssumeNormalizedDir = false>
     proto_always_inline std::optional<std::pair<T, T>> intersect_unchecked(const Ray<T>& ray) const {
         auto oc = ray.org - center;
-        auto a = dot(ray.dir, ray.dir);
+        auto a = AssumeNormalizedDir ? T(1) : dot(ray.dir, ray.dir);
         auto b = 2 * dot(ray.dir, oc);
         auto c = dot(oc, oc) - radius * radius;
 
@@ -57,8 +58,9 @@ struct Sphere  {
 
     /// Intersects a ray with the sphere. If an intersection is found,
     /// this function updates `ray.tmax` with the corresponding distance along the ray.
+    template <bool AssumeNormalizedDir = false>
     proto_always_inline bool intersect(Ray<T>& ray) const {
-        if (auto range = intersect_unchecked(ray)) {
+        if (auto range = intersect_unchecked<AssumeNormalizedDir>(ray)) {
             auto [t0, t1] = *range;
             if (t0 >= ray.tmin && t0 <= ray.tmax)
                 return ray.tmax = t0, true;
