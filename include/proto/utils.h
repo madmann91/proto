@@ -19,7 +19,7 @@
 #define proto_always_inline __forceinline
 #else
 #define proto_restrict
-#define proto_always_inline
+#define proto_always_inline inline
 #endif
 
 #if defined(__clang__)
