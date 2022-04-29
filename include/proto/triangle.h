@@ -30,6 +30,9 @@ struct Triangle {
     /// Intersects a ray with the triangle. If an intersection is found,
     /// this function updates `ray.tmax` with the corresponding distance along the ray,
     /// and returns the barycentric coordinates on the triangle as a pair.
+    /// When `NonZeroTolerance` is true, the routine uses a small tolerance to avoid
+    /// missing intersections at the edges.
+    template <bool NonZeroTolerance = false>
     proto_always_inline std::optional<std::pair<T, T>> intersect(Ray<T>& ray) const;
 
     bool operator == (const Triangle& other) const {
@@ -67,6 +70,7 @@ struct PrecomputedTriangle {
 
     /// Fast ray-triangle intersection routine using precomputed data.
     /// See `Triangle<T>::intersect()` for more details.
+    template <bool NonZeroTolerance = false>
     proto_always_inline std::optional<std::pair<T, T>> intersect(Ray<T>& ray) const {
         auto c = v0 - ray.org;
         auto r = cross(ray.dir, c);
@@ -78,10 +82,17 @@ struct PrecomputedTriangle {
 
         // These comparisons are designed to return false
         // when one of t, u, or v is a NaN
+        static constexpr auto tolerance =
+            NonZeroTolerance ? -std::numeric_limits<T>::epsilon() : T(0);
         if (u >= 0 && v >= 0 && w >= 0) {
             auto t = dot(n, c) * inv_det;
-            if (t >= ray.tmin && t <= ray.tmax)
+            if (t >= ray.tmin && t <= ray.tmax) {
+                if constexpr (NonZeroTolerance) {
+                    u = robust_max(u, T(0));
+                    v = robust_max(v, T(0));
+                }
                 return ray.tmax = t, std::make_optional(std::pair { u, v });
+            }
         }
 
         return std::nullopt;
@@ -98,8 +109,9 @@ struct PrecomputedTriangle {
 };
 
 template <typename T>
+template <bool NonZeroTolerance>
 std::optional<std::pair<T, T>> Triangle<T>::intersect(Ray<T>& ray) const {
-    return PrecomputedTriangle<T>(*this).intersect(ray);
+    return PrecomputedTriangle<T>(*this).template intersect<NonZeroTolerance>(ray);
 }
 
 using Trianglef = Triangle<float>;
